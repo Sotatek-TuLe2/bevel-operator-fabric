@@ -269,7 +269,7 @@ EOF
 
 ```bash
 
-kubectl hlf ca create  --image=$CA_IMAGE --version=$CA_VERSION --storage-class=standard --capacity=1Gi --name=org1-ca \
+kubectl hlf ca create  --image=$CA_IMAGE --version=$CA_VERSION --storage-class=gp2 --capacity=1Gi --name=org1-ca \
     --enroll-id=enroll --enroll-pw=enrollpw --hosts=org1-ca.donnytran.com --istio-port=443
 
 kubectl wait --timeout=180s --for=condition=Running fabriccas.hlf.kungfusoftware.es --all
@@ -293,12 +293,12 @@ kubectl hlf ca register --name=org1-ca --user=peer --secret=peerpw --type=peer \
 ### Deploy a peer
 
 ```bash
-kubectl hlf peer create --statedb=couchdb --image=$PEER_IMAGE --version=$PEER_VERSION --storage-class=standard --enroll-id=peer --mspid=Org1MSP \
+kubectl hlf peer create --statedb=couchdb --image=$PEER_IMAGE --version=$PEER_VERSION --storage-class=gp2 --enroll-id=peer --mspid=Org1MSP \
         --enroll-pw=peerpw --capacity=5Gi --name=org1-peer0 --ca-name=org1-ca.default \
         --hosts=peer0-org1.donnytran.com --istio-port=443
 
 
-kubectl hlf peer create --statedb=couchdb --image=$PEER_IMAGE --version=$PEER_VERSION --storage-class=standard --enroll-id=peer --mspid=Org1MSP \
+kubectl hlf peer create --statedb=couchdb --image=$PEER_IMAGE --version=$PEER_VERSION --storage-class=gp2 --enroll-id=peer --mspid=Org1MSP \
         --enroll-pw=peerpw --capacity=5Gi --name=org1-peer1 --ca-name=org1-ca.default \
         --hosts=peer1-org1.donnytran.com --istio-port=443
 
@@ -324,7 +324,7 @@ To deploy an `Orderer` organization we have to:
 
 ```bash
 
-kubectl hlf ca create  --image=$CA_IMAGE --version=$CA_VERSION --storage-class=standard --capacity=1Gi --name=ord-ca \
+kubectl hlf ca create  --image=$CA_IMAGE --version=$CA_VERSION --storage-class=gp2 --capacity=1Gi --name=ord-ca \
     --enroll-id=enroll --enroll-pw=enrollpw --hosts=ord-ca.donnytran.com --istio-port=443
 
 kubectl wait --timeout=180s --for=condition=Running fabriccas.hlf.kungfusoftware.es --all
@@ -348,7 +348,7 @@ kubectl hlf ca register --name=ord-ca --user=orderer --secret=ordererpw \
 
 ```bash
 kubectl hlf ordnode create --image=$ORDERER_IMAGE --version=$ORDERER_VERSION \
-    --storage-class=standard --enroll-id=orderer --mspid=OrdererMSP \
+    --storage-class=gp2 --enroll-id=orderer --mspid=OrdererMSP \
     --enroll-pw=ordererpw --capacity=2Gi --name=ord-node1 --ca-name=ord-ca.default \
     --hosts=orderer0-ord.donnytran.com --istio-port=443
 
