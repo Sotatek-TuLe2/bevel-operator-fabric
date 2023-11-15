@@ -270,7 +270,7 @@ EOF
 ```bash
 
 kubectl hlf ca create  --image=$CA_IMAGE --version=$CA_VERSION --storage-class=standard --capacity=1Gi --name=org1-ca \
-    --enroll-id=enroll --enroll-pw=enrollpw --hosts=org1-ca.localho.st --istio-port=443
+    --enroll-id=enroll --enroll-pw=enrollpw --hosts=org1-ca.donnytran.com --istio-port=443
 
 kubectl wait --timeout=180s --for=condition=Running fabriccas.hlf.kungfusoftware.es --all
 ```
@@ -278,7 +278,7 @@ kubectl wait --timeout=180s --for=condition=Running fabriccas.hlf.kungfusoftware
 Check that the certification authority is deployed and works:
 
 ```bash
-curl -k https://org1-ca.localho.st:443/cainfo
+curl -k https://org1-ca.donnytran.com:443/cainfo
 ```
 
 Register a user in the certification authority of the peer organization (Org1MSP)
@@ -295,12 +295,12 @@ kubectl hlf ca register --name=org1-ca --user=peer --secret=peerpw --type=peer \
 ```bash
 kubectl hlf peer create --statedb=couchdb --image=$PEER_IMAGE --version=$PEER_VERSION --storage-class=standard --enroll-id=peer --mspid=Org1MSP \
         --enroll-pw=peerpw --capacity=5Gi --name=org1-peer0 --ca-name=org1-ca.default \
-        --hosts=peer0-org1.localho.st --istio-port=443
+        --hosts=peer0-org1.donnytran.com --istio-port=443
 
 
 kubectl hlf peer create --statedb=couchdb --image=$PEER_IMAGE --version=$PEER_VERSION --storage-class=standard --enroll-id=peer --mspid=Org1MSP \
         --enroll-pw=peerpw --capacity=5Gi --name=org1-peer1 --ca-name=org1-ca.default \
-        --hosts=peer1-org1.localho.st --istio-port=443
+        --hosts=peer1-org1.donnytran.com --istio-port=443
 
 kubectl wait --timeout=180s --for=condition=Running fabricpeers.hlf.kungfusoftware.es --all
 ```
@@ -308,8 +308,8 @@ kubectl wait --timeout=180s --for=condition=Running fabricpeers.hlf.kungfusoftwa
 Check that the peer is deployed and works:
 
 ```bash
-openssl s_client -connect peer0-org1.localho.st:443
-openssl s_client -connect peer1-org1.localho.st:443
+openssl s_client -connect peer0-org1.donnytran.com:443
+openssl s_client -connect peer1-org1.donnytran.com:443
 ```
 
 ## Deploy an `Orderer` organization
@@ -325,7 +325,7 @@ To deploy an `Orderer` organization we have to:
 ```bash
 
 kubectl hlf ca create  --image=$CA_IMAGE --version=$CA_VERSION --storage-class=standard --capacity=1Gi --name=ord-ca \
-    --enroll-id=enroll --enroll-pw=enrollpw --hosts=ord-ca.localho.st --istio-port=443
+    --enroll-id=enroll --enroll-pw=enrollpw --hosts=ord-ca.donnytran.com --istio-port=443
 
 kubectl wait --timeout=180s --for=condition=Running fabriccas.hlf.kungfusoftware.es --all
 
@@ -334,14 +334,14 @@ kubectl wait --timeout=180s --for=condition=Running fabriccas.hlf.kungfusoftware
 Check that the certification authority is deployed and works:
 
 ```bash
-curl -vik https://ord-ca.localho.st:443/cainfo
+curl -vik https://ord-ca.donnytran.com:443/cainfo
 ```
 
 ### Register user `orderer`
 
 ```bash
 kubectl hlf ca register --name=ord-ca --user=orderer --secret=ordererpw \
-    --type=orderer --enroll-id enroll --enroll-secret=enrollpw --mspid=OrdererMSP --ca-url="https://ord-ca.localho.st:443"
+    --type=orderer --enroll-id enroll --enroll-secret=enrollpw --mspid=OrdererMSP --ca-url="https://ord-ca.donnytran.com:443"
 
 ```
 ### Deploy orderer
@@ -350,7 +350,7 @@ kubectl hlf ca register --name=ord-ca --user=orderer --secret=ordererpw \
 kubectl hlf ordnode create --image=$ORDERER_IMAGE --version=$ORDERER_VERSION \
     --storage-class=standard --enroll-id=orderer --mspid=OrdererMSP \
     --enroll-pw=ordererpw --capacity=2Gi --name=ord-node1 --ca-name=ord-ca.default \
-    --hosts=orderer0-ord.localho.st --istio-port=443
+    --hosts=orderer0-ord.donnytran.com --istio-port=443
 
 kubectl wait --timeout=180s --for=condition=Running fabricorderernodes.hlf.kungfusoftware.es --all
 ```
@@ -362,7 +362,7 @@ kubectl get pods
 ```
 
 ```bash
-openssl s_client -connect orderer0-ord.localho.st:443
+openssl s_client -connect orderer0-ord.donnytran.com:443
 ```
 
 
